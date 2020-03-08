@@ -1,0 +1,41 @@
+<%- include("../partials/header") %>
+<div class="container">
+	<header class="jumbotron">
+		<div class="container">
+			<h1>
+				YelpCamps Official.
+			</h1>
+			<p>
+				Welcome to the Utopia.
+			</p>
+			<p class="btn btn-lg">	
+				<a href="/campgrounds/new"><strong>Add a new campsite here.</strong></a>
+			</p>
+		</div>
+
+	</header>
+	<div class="row">
+		<% sites.forEach(function(camps){%>
+		<div class="col-md-3 col-sm-6">
+			<div class="thumbnail">
+				<img src="<%= camps.image %>">	
+			</div>
+			<div class="caption">
+				<h2>
+					<%= camps.name %>
+				</h2>
+			</div>
+			<p >
+				<a class="btn btn-primary"  href="/campgrounds/<%= camps._id %>">Description</a>
+			</p>
+			
+		</div>
+		<%});%>
+	</div>
+
+
+
+</div>
+
+
+<%- include("../partials/footer") %>
