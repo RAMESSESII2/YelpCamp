@@ -2,9 +2,12 @@ const express= require('express');
 const app= express();
 const request=require('request');
 const bodyparser=require('body-parser');
-const mongoose=require('mongoose');
+const mongoose=require('mongoose'),
+	  passport=require("passport"),
+	  LocalStrategy=require("passport-local");
 const Campground=require("./models/campgrounds.js");
-const Comment=require("./models/comments.js");
+const Comment=require("./models/comments.js"),
+	  User=require("./models/user")
 mongoose.connect("mongodb://localhost:27017/yelpcampdb",{useUnifiedTopology: true});
 const seedDB=require("./seeds.js");
 app.use(express.static(__dirname+"/public"));
