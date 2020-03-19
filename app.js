@@ -1,4 +1,5 @@
 const express= require('express');
+
 const app= express();
 const request=require('request');
 const bodyparser=require('body-parser');
@@ -7,11 +8,19 @@ const mongoose=require('mongoose'),
 	  LocalStrategy=require("passport-local");
 const Campground=require("./models/campgrounds.js");
 const Comment=require("./models/comments.js"),
-	  User=require("./models/user")
+	  User=require("./models/user");
+
+//routes module exported here
+const campgroundRoutes= require("./routes/campgrounds.js"),
+	  commentRoutes= require("./routes/comments"),
+	  indexRoutes= require("./routes/index");
+
 mongoose.connect("mongodb://localhost:27017/yelpcampdb",{useUnifiedTopology: true});
 const seedDB=require("./seeds.js");
 app.use(express.static(__dirname+"/public"));
-seedDB();
+
+//seedDB();  //seed the database
+
 // const campgroundSchema= new mongoose.Schema({
 // 	name: String,
 // 	image: String,
@@ -35,85 +44,29 @@ seedDB();
 		}	
 	]; */
 
+	//PASSPORT CONFIGURATION
+app.use(require("express-session")({
+	secret:"RamessesII is Ozymandias.",
+	resave: false,
+	saveUninitialized: false
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
 app.use(bodyparser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
-app.get('/',(req, res)=>{
-	res.render("campgrounds/home");
+app.use(function(req, res, next){
+	res.locals.currentUser= req.user;
+	next();
 });
 
-app.get('/campgrounds',(req, res)=>{
-	
-	Campground.find({}, function(err, allcampgrounds){
-		if(err){
-			console.log(err);
-		}else{
-			res.render("campgrounds/yelpgrounds", {sites: allcampgrounds});
-		}
-	});
-	
-});
-
-app.post('/campgrounds',(req,res)=>{
-	const name=req.body.name;
-	const link=req.body.link;
-	const desc= req.body.description;
-	const newcamp={name:name, image: link, description: desc};
-	Campground.create(newcamp, function(err, newlycreated){
-		if(err){
-			console.log(err);
-		}
-		else{
-			res.redirect("/campgrounds");
-		}
-	})
-	
-});
-
-app.get('/campgrounds/new',(req,res)=>{
-	res.render("campgrounds/newGrounds");
-});
-
-app.get('/campgrounds/:id',(req, res)=>{
-	Campground.findById(req.params.id).populate("comments").exec(function(err, foundCampground){
-		if(err){
-			console.log(err);
-		}
-		else{
-			console.log(foundCampground);
-			res.render("campgrounds/show", {campground : foundCampground});
-		}
-	});
-});
-//COMMENT ROUTES=========================
-
-app.get("/campgrounds/:id/comments/new",function(req, res){
-	Campground.findById(req.params.id, function(err, campground){
-		if(err)
-			console.log(err);
-		else
-			res.render("comments/new",{campground: campground});			
-	});
-
-});
-
-app.post("/campgrounds/:id/comments",function(req, res){
-	Campground.findById(req.params.id, function(err, campground){
-		if(err){
-			console.log(err);
-			res.redirect("/campgrounds");}
-		else{
-		Comment.create(req.body.comment,async function(err, comment){
-				if(err)
-					console.log(err);
-				else{						await campground.comments.push(comment);
-					 console.log("Comment added ");
-					await campground.save();
-					 console.log(comment);
-					res.redirect('/campgrounds/'+campground._id);}
-			});		
-	};
-});
-});
+app.use("/campgrounds",campgroundRoutes);
+app.use("/campgrounds/:id/comments/",commentRoutes);
+app.use("/",indexRoutes);
 
 app.listen(process.env.PORT || 3000, process.env.IP, function(){
 	console.log('Movie App Server is online');

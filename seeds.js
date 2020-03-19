@@ -24,21 +24,21 @@ const mongoose= require("mongoose"),
 async function seedDB(){
 	try{
 		await Campground.remove({});
-		console.log('Campgrounds removed');
-		await Comment.remove({});
+	// 	console.log('Campgrounds removed');
+	// 	await Comment.remove({});
 
-		for(const seed of seeds){
-				//add few campgrounds
-		let campground=await Campground.create(seed);
-		console.log('Campgrounds created');
-		let comment=await Comment.create({
-					text:"This is a great place to visit",
-				author:"Holmes"});
-		console.log('Comments created');	
-		campground.comments.push(comment);
-		campground.save();
-		console.log('Comments added to campgrounds');
-	};
+	// 	for(const seed of seeds){
+	// 			//add few campgrounds
+	// 	let campground=await Campground.create(seed);
+	// 	console.log('Campgrounds created');
+	// 	let comment=await Comment.create({
+	// 				text:"This is a great place to visit",
+	// 			author:"Holmes"});
+	// 	console.log('Comments created');	
+	// 	campground.comments.push(comment);
+	// 	campground.save();
+	// 	console.log('Comments added to campgrounds');
+	// };
 } 	catch(err){
 		console.log(err);
 	}

@@ -21,41 +21,35 @@
 						$9.9999
 					</h4>
 					<h3>
-						<a><%= campground.name %> </a>
+						<a><%=campground.name %> </a>
 					</h3>
 					<p>
-						<%= campground.description %>
+						<%=campground.description %>
 					</p>
 				</div>
 				
 			</div>
 			<div class="well">
 				<div class="text-right">
-					<a class="btn btn-success" href="/campgrounds/<%=campground._id%>/comments/new">Add a new comment</a>
+					<a class="btn btn-success" href="/campgrounds/<%=campground._id%>/comments/new">
+						Add a new comment</a>
 				</div>
 				<hr>
 				<% campground.comments.forEach(function(comment){ %>
 	<div class="row">
 		<div class="col-md-12">
-			<strong><%= comment.author%></strong>
-			<span class="pull-right">10 days ago</span>
-			
-	<p>
-		-<%= comment.text%>
-	</p>
+			<strong><%= comment.author.username %></strong>
+			<span class="pull-right">10 days ago</span>		
+		<p>
+			<%= comment.text %>
+		</p>
 		</div>
+	</div>
 <% }) %>
 			</div>	
 			</div>
 			
 		</div>
 	</div>
-	
-
-
-	
-</div>
-
-
 
 <%- include("../partials/footer") %>
