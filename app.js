@@ -21,7 +21,7 @@ const seedDB=require("./seeds.js");
 app.use(express.static(__dirname+"/public"));
 
 
-//seedDB();  //seed the database
+seedDB();  //seed the database
 
 // const campgroundSchema= new mongoose.Schema({
 // 	name: String,
