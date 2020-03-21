@@ -9,7 +9,8 @@ const mongoose=require('mongoose'),
 const Campground=require("./models/campgrounds.js");
 const Comment=require("./models/comments.js"),
 	  User=require("./models/user");
-
+const  methodOverride= require("method-override");
+app.use(methodOverride("_method"));
 //routes module exported here
 const campgroundRoutes= require("./routes/campgrounds.js"),
 	  commentRoutes= require("./routes/comments"),
@@ -18,6 +19,7 @@ const campgroundRoutes= require("./routes/campgrounds.js"),
 mongoose.connect("mongodb://localhost:27017/yelpcampdb",{useUnifiedTopology: true});
 const seedDB=require("./seeds.js");
 app.use(express.static(__dirname+"/public"));
+
 
 //seedDB();  //seed the database
 
