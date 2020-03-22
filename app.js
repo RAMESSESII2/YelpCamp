@@ -5,7 +5,8 @@ const request=require('request');
 const bodyparser=require('body-parser');
 const mongoose=require('mongoose'),
 	  passport=require("passport"),
-	  LocalStrategy=require("passport-local");
+	  LocalStrategy=require("passport-local"),
+	  flash=require("connect-flash");
 const Campground=require("./models/campgrounds.js");
 const Comment=require("./models/comments.js"),
 	  User=require("./models/user");
@@ -17,7 +18,11 @@ const campgroundRoutes= require("./routes/campgrounds.js"),
 	  indexRoutes= require("./routes/index");
 
 mongoose.connect("mongodb://localhost:27017/yelpcampdb",{useUnifiedTopology: true});
+//mongoose.connect(mongodb+srv://myjournal-2hxwd.mongodb.net/test"  --username RamessesII",{useUnifiedTopology: true});
+
+
 const seedDB=require("./seeds.js");
+app.use(flash());
 app.use(express.static(__dirname+"/public"));
 
 
@@ -63,6 +68,8 @@ app.use(bodyparser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
 app.use(function(req, res, next){
 	res.locals.currentUser= req.user;
+	res.locals.error= req.flash("error");
+	res.locals.success= req.flash("success");
 	next();
 });
 

@@ -1,10 +1,12 @@
 const express= require("express"),
       router= express.Router(),
       passport= require("passport"),
-      User= require("../models/user.js");
+	  User= require("../models/user.js"),
+	  middleware=require("../middleware/index");
+
 
 router.get('/',(req, res)=>{
-	res.render("campgrounds/home");
+	res.render("landing.ejs");
 });
 
 //show register form
@@ -16,9 +18,10 @@ router.post("/register", (req, res)=>{
 	const newUser= new User({username: req.body.username});
 	User.register(newUser, req.body.password, function(err, user){
 		if(err){
-			console.log(err);
+			req.flash("error", err.message);
 			return res.render("register");
 		}
+		req.flash("success", "WELCOME "+user.username);
 		passport.authenticate("local")(req, res, function(){
 			res.redirect("/campgrounds");
 		});
@@ -26,7 +29,7 @@ router.post("/register", (req, res)=>{
 });
 //show login template
 router.get("/login", (req, res)=>{
-	res.render("login")
+	res.render("login");
 });
 //login post logic
 router.post("/login", passport.authenticate("local",
@@ -39,17 +42,10 @@ router.post("/login", passport.authenticate("local",
 
 router.get("/logout", (req, res)=>{
 	req.logout();
+	req.flash("success", "Logged you out");
 	res.redirect("/campgrounds");
 });
 
-//MIDDLEWARE
 
-function isLogged(req, res, next){
-	if(req.isAuthenticated()){
-		return next();
-	}
-	else
-		res.redirect("/login");
-};
 
 module.exports= router;
