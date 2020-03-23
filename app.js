@@ -12,13 +12,22 @@ const Comment=require("./models/comments.js"),
 	  User=require("./models/user");
 const  methodOverride= require("method-override");
 app.use(methodOverride("_method"));
+
 //routes module exported here
 const campgroundRoutes= require("./routes/campgrounds.js"),
 	  commentRoutes= require("./routes/comments"),
 	  indexRoutes= require("./routes/index");
 
-mongoose.connect("mongodb://localhost:27017/yelpcampdb",{useUnifiedTopology: true});
-//mongoose.connect(mongodb+srv://myjournal-2hxwd.mongodb.net/test"  --username RamessesII",{useUnifiedTopology: true});
+// mongoose.connect("mongodb://localhost:27017/yelpcampdb",{useUnifiedTopology: true});
+mongoose.connect("mongodb+srv://RamessesII:Buga@1902@myjournal-2hxwd.mongodb.net/test?retryWrites=true&w=majority",{
+	useNewUrlParser: true,
+	useUnifiedTopology: true,
+	useCreateIndex: true
+}).then(()=>{
+	console.log("Connected to db");
+}).catch(err=>{
+	console.log("ERROR", err.message);
+});
 
 
 const seedDB=require("./seeds.js");
@@ -78,5 +87,5 @@ app.use("/campgrounds/:id/comments/",commentRoutes);
 app.use("/",indexRoutes);
 
 app.listen(process.env.PORT || 3000, process.env.IP, function(){
-	console.log('Movie App Server is online');
+	console.log('Server is online');
 });
