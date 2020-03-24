@@ -17,9 +17,18 @@ const campgroundRoutes= require("./routes/campgrounds.js"),
 	  commentRoutes= require("./routes/comments"),
 	  indexRoutes= require("./routes/index");
 
-console.log(process.env.DATABASEURL);
-
- mongoose.connect("mongodb://localhost:27017/yelpcampdb",{useUnifiedTopology: true});
+const url = process.env.DATABASEURL || "mongodb://localhost:27017/yelpcampdb";
+ //mongoose.connect("mongodb://localhost:27017/yelpcampdb",{useUnifiedTopology: true});
+ //export DATABASEURL=mongodb://localhost:27017/yelpcampdb
+ mongoose.connect(url,{
+		useNewUrlParser: true,
+		useUnifiedTopology: true,
+		useCreateIndex: true
+	}).then(()=>{
+		console.log("Connected to db");
+	}).catch(err=>{
+		console.log("ERROR", err.message);
+	}); 
 // mongoose.connect("mongodb+srv://RamessesII:Buga@1902@myjournal-2hxwd.mongodb.net/test?retryWrites=true&w=majority",{
 // 	useNewUrlParser: true,
 // 	useUnifiedTopology: true,
