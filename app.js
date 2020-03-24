@@ -1,5 +1,4 @@
 const express= require('express');
-
 const app= express();
 const request=require('request');
 const bodyparser=require('body-parser');
@@ -18,16 +17,18 @@ const campgroundRoutes= require("./routes/campgrounds.js"),
 	  commentRoutes= require("./routes/comments"),
 	  indexRoutes= require("./routes/index");
 
-// mongoose.connect("mongodb://localhost:27017/yelpcampdb",{useUnifiedTopology: true});
-mongoose.connect("mongodb+srv://RamessesII:Buga@1902@myjournal-2hxwd.mongodb.net/test?retryWrites=true&w=majority",{
-	useNewUrlParser: true,
-	useUnifiedTopology: true,
-	useCreateIndex: true
-}).then(()=>{
-	console.log("Connected to db");
-}).catch(err=>{
-	console.log("ERROR", err.message);
-});
+console.log(process.env.DATABASEURL);
+
+ mongoose.connect("mongodb://localhost:27017/yelpcampdb",{useUnifiedTopology: true});
+// mongoose.connect("mongodb+srv://RamessesII:Buga@1902@myjournal-2hxwd.mongodb.net/test?retryWrites=true&w=majority",{
+// 	useNewUrlParser: true,
+// 	useUnifiedTopology: true,
+// 	useCreateIndex: true
+// }).then(()=>{
+// 	console.log("Connected to db");
+// }).catch(err=>{
+// 	console.log("ERROR", err.message);
+// });
 
 
 const seedDB=require("./seeds.js");
